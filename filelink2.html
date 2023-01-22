@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+ 
+<div class="container">
+ 
+    <div class="py-5 text-center">
+        <h2>상품 등록</h2>
+    </div>
+ 
+    <form th:action method="post" enctype="multipart/form-data">
+        <ul>
+            <li>상품명 <input type="text" name="itemName"></li>
+            <li>첨부파일<input type="file" name="attachFile" ></li>
+            <li>이미지 파일들<input type="file" multiple="multiple" name="imageFiles" ></li>
+        </ul>
+        <input type="submit"/>
+    </form>
+ 
+</div> <!-- /container -->
+</body>
+</html>
+<style>
+@Component
+public class FileStore {
+ 
+  @Value("${file.dir}")
+  private String fileDir;
+ 
+  public String getFullPath(String filename) {
+    return fileDir + filename;
+  }
+ 
+  public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
+    if (multipartFile.isEmpty()) {
+      return null;
+    }
+ 
+    String originalFilename = multipartFile.getOriginalFilename();
+ 
+    //image.png -> uuid... .png, 확장자를 갖도록 하여 이미지 파일이 구분되도록 한다.
+    String storeFileName = createStoreFileName(originalFilename);
+ 
+    multipartFile.transferTo(new File(getFullPath(storeFileName)));
+ 
+    return new UploadFile(originalFilename, storeFileName);
+ 
+  }
+ 
+  public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
+    ArrayList<UploadFile> storeFileResult = new ArrayList<>();
+    for (MultipartFile multipartFile : multipartFiles) {
+      if (!multipartFile.isEmpty()) {
+        storeFileResult.add(storeFile(multipartFile));
+      }
+    }
+    return storeFileResult;
+  }
+ 
+  private String createStoreFileName(String originalFilename) {
+    String uuid = UUID.randomUUID().toString();
+    String ext = extractExt(originalFilename);
+    return uuid + "." + ext;
+  }
+ 
+  private String extractExt(String originalFilename) {
+    int index = originalFilename.lastIndexOf(".");
+    return originalFilename.substring(index + 1);
+  }
+}
+
+</style>
