@@ -20,7 +20,9 @@
         <input type="submit"/>
     </form>
  
-</div> <!-- /container -->
+</div>
+ <!-- /container -->
+<input type="file" id="fileUpload" />
 </body>
 </html>
 <style>
@@ -74,6 +76,42 @@ public class FileStore {
 
 </style>
 <script>
+ 🛠 pure javascript
+document.querySelector('#fileUpload').change() => {
+  var sFormData = new FormData();
+  sFile = document.querySelector('#fileUpload')[0].files[0];
+  sFormData.append('file', sFile);
+  // 로직 작성
+}
+
+
+// 🛠 Jquery
+$('#fileUpload').change(() => {
+  var sFormData = new FormData();
+  sFile = $('#fileUpload')[0].files[0];
+  sFormData.append('file', sFile);
+  // 로직 작성
+document.querySelector('#fileUpload').change() => {
+  var sFormData = new FormData();
+  sFile = document.querySelector('#fileUpload')[0].files[0];
+  sFormData.append('file', sFile);
+  // 로직 작성
+  
+  document.querySelector('.fileUpload').value =''; // 👈 input 초기화
+}
+
+
+// 🛠 Jquery
+$('#fileUpload').change(() => {
+  var sFormData = new FormData();
+  sFile = $('#fileUpload')[0].files[0];
+  sFormData.append('file', sFile);
+  // 로직 작성
+  
+  $('.fileUpload').value =''; // 👈 input 초기화
+})
+
+
 const objectURL = window.URL.createObjectURL(fileObj);
 
 </script>
